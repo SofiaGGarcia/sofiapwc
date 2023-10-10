@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <apiVersion>59.0</apiVersion>
+    <decisions>
+        <name>Decision</name>
+        <label>Decision</label>
+        <locationX>176</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>Cryptocurrency_Transactions</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>BuySell</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>TypeofTransaction</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Buying</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>TypeofTransaction</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Selling</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Cryptocurrency_Transactions</targetReference>
+            </connector>
+            <label>BuySell</label>
+        </rules>
+    </decisions>
+    <dynamicChoiceSets>
+        <name>TransactionType</name>
+        <dataType>Picklist</dataType>
+        <displayField xsi:nil="true"/>
+        <object xsi:nil="true"/>
+        <picklistField>Transaction_Type__c</picklistField>
+        <picklistObject>Transaction__c</picklistObject>
+        <sortOrder>Asc</sortOrder>
+    </dynamicChoiceSets>
+    <environments>Default</environments>
+    <interviewLabel>Transaction Flow {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Transaction Flow</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>Flow</processType>
+    <recordCreates>
+        <name>Cryptocurrency_Transactions</name>
+        <label>Cryptocurrency Transactions</label>
+        <locationX>176</locationX>
+        <locationY>434</locationY>
+        <inputAssignments>
+            <field>Transaction_Type__c</field>
+            <value>
+                <elementReference>BuySell</elementReference>
+            </value>
+        </inputAssignments>
+        <object>Transaction__c</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordCreates>
+    <screens>
+        <name>Cryptocurrency_Transaction_Recording</name>
+        <label>Cryptocurrency Transaction Recording</label>
+        <locationX>176</locationX>
+        <locationY>134</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>true</allowFinish>
+        <allowPause>true</allowPause>
+        <connector>
+            <targetReference>Decision</targetReference>
+        </connector>
+        <fields>
+            <name>TypeofTransaction</name>
+            <choiceReferences>TransactionType</choiceReferences>
+            <dataType>String</dataType>
+            <defaultValue>
+                <stringValue>Buying</stringValue>
+            </defaultValue>
+            <fieldText>Type of Transaction</fieldText>
+            <fieldType>DropdownBox</fieldType>
+            <isRequired>true</isRequired>
+        </fields>
+        <fields>
+            <name>Price_in_Dollars</name>
+            <dataType>Number</dataType>
+            <fieldText>Price in Dollars</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+            <scale>2</scale>
+        </fields>
+        <fields>
+            <name>Quantity</name>
+            <dataType>Number</dataType>
+            <fieldText>Quantity</fieldText>
+            <fieldType>InputField</fieldType>
+            <isRequired>true</isRequired>
+            <scale>2</scale>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>true</showHeader>
+    </screens>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Cryptocurrency_Transaction_Recording</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+</Flow>
